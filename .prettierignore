@@ -1,0 +1,24 @@
+# Ignore artifacts and temporary directories
+/build
+/dist
+/package
+node_modules
+
+# Environment files
+.env
+.env.*
+!.env.example # Do not ignore the example environment file
+
+# Lock files
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Operating System files
+.DS_Store
+
+# Version control and editor-specific files
+.git
+.gitignore
+.vscode/*
+.idea/*

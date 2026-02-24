@@ -1,0 +1,162 @@
+/* =========================================================
+   THEME BINDING LAYER
+   Environment → Semantic Tokens
+   Used by both VS Code Webview and Browser (Vite dev)
+   ========================================================= */
+
+/* =========================================================
+   1️⃣ Default Mapping (VS Code first, fallback second)
+   ========================================================= */
+
+:root {
+  /* =======================
+     Backgrounds
+     ======================= */
+  --bg-primary: var(--vscode-editor-background, #1e1e1e);
+  --bg-secondary: var(--vscode-sideBar-background, #252526);
+  --bg-tertiary: var(--vscode-panel-background, #1e1e1e);
+  --bg-elevated: var(--vscode-editorWidget-background, #2d2d2d);
+
+  /* =======================
+     Text
+     ======================= */
+  --text-primary: var(--vscode-foreground, #e0e0e0);
+  --text-muted: var(--vscode-descriptionForeground, #9e9e9e);
+  --text-link: var(--vscode-textLink-foreground, #3794ff);
+  --text-disabled: var(--vscode-disabledForeground, #6e6e6e);
+
+  /* =======================
+     Borders
+     ======================= */
+  --border-default: var(--vscode-editorGroup-border, #2d2d2d);
+  --border-muted: var(--vscode-panel-border, #2d2d2d);
+  --border-focus: var(--vscode-focusBorder, #007acc);
+
+  /* =======================
+     Interactive
+     ======================= */
+  --interactive-bg: var(--vscode-button-background, #0e639c);
+  --interactive-bg-hover: var(--vscode-button-hoverBackground, #1177bb);
+  --interactive-bg-active: var(--vscode-button-background, #0e639c);
+  --interactive-text: var(--vscode-button-foreground, #ffffff);
+
+  --input-bg: var(--vscode-input-background, #3c3c3c);
+  --input-border: var(--vscode-input-border, #3c3c3c);
+  --input-text: var(--vscode-input-foreground, #cccccc);
+
+  /* =======================
+     Status
+     ======================= */
+  --status-error: var(--vscode-errorForeground, #f14c4c);
+  --status-warning: var(--vscode-editorWarning-foreground, #cca700);
+  --status-success: var(--vscode-terminal-ansiGreen, #4ec9b0);
+  --status-info: var(--vscode-editorInfo-foreground, #3794ff);
+
+  /* =======================
+     Scrollbars
+     ======================= */
+  --scrollbar-bg: var(
+    --vscode-scrollbarSlider-background,
+    rgba(121, 121, 121, 0.4)
+  );
+  --scrollbar-hover: var(
+    --vscode-scrollbarSlider-hoverBackground,
+    rgba(100, 100, 100, 0.7)
+  );
+  --scrollbar-active: var(
+    --vscode-scrollbarSlider-activeBackground,
+    rgba(191, 191, 191, 0.4)
+  );
+
+  /* =======================
+     Selection
+     ======================= */
+  --selection-bg: var(
+    --vscode-editor-selectionBackground,
+    rgba(0, 122, 204, 0.3)
+  );
+  --selection-text: var(--vscode-editor-selectionForeground, inherit);
+}
+
+/* =========================================================
+   2️⃣ Browser Support (When NOT inside VS Code)
+   This only applies when vscode vars are missing.
+   ========================================================= */
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-vscode-context]) {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f3f3f3;
+    --bg-tertiary: #eaeaea;
+    --bg-elevated: #ffffff;
+
+    --text-primary: #1e1e1e;
+    --text-muted: #616161;
+    --text-link: #0066cc;
+    --text-disabled: #9e9e9e;
+
+    --border-default: #e0e0e0;
+    --border-muted: #e0e0e0;
+    --border-focus: #007acc;
+
+    --interactive-bg: #007acc;
+    --interactive-bg-hover: #005f9e;
+    --interactive-bg-active: #004a7a;
+    --interactive-text: #ffffff;
+
+    --input-bg: #ffffff;
+    --input-border: #cccccc;
+    --input-text: #1e1e1e;
+
+    --status-error: #d32f2f;
+    --status-warning: #ed6c02;
+    --status-success: #2e7d32;
+    --status-info: #0288d1;
+  }
+}
+
+/* =========================================================
+   3️⃣ High Contrast Mode (VS Code Accessibility)
+   ========================================================= */
+
+@media (forced-colors: active) {
+  :root {
+    --bg-primary: Canvas;
+    --bg-secondary: Canvas;
+    --text-primary: CanvasText;
+    --border-default: GrayText;
+
+    --interactive-bg: Highlight;
+    --interactive-text: HighlightText;
+
+    --status-error: Highlight;
+    --status-warning: Highlight;
+    --status-success: Highlight;
+  }
+}
+
+/* =========================================================
+   4️⃣ Optional Manual Override (for Testing / Future Themes)
+   ========================================================= */
+
+/* Force Light */
+:root[data-theme='light'] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f3f3;
+  --text-primary: #1e1e1e;
+  --border-default: #e0e0e0;
+}
+
+/* Force Dark */
+:root[data-theme='dark'] {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #252526;
+  --text-primary: #e0e0e0;
+  --border-default: #2d2d2d;
+}
+
+/* Example: Custom Brand Theme */
+:root[data-theme='brand'] {
+  --interactive-bg: #6b46c1;
+  --interactive-bg-hover: #553c9a;
+}

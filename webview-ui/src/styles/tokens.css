@@ -1,0 +1,25 @@
+:root {
+  /* Backgrounds */
+  --bg-primary: transparent;
+  --bg-secondary: transparent;
+
+  /* Text */
+  --text-primary: inherit;
+  --text-muted: inherit;
+
+  /* Borders */
+  --border-default: transparent;
+
+  /* Accent */
+  --accent-primary: transparent;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+}

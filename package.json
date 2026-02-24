@@ -1,0 +1,114 @@
+{
+  "name": "mdz-vscode-extension",
+  "displayName": "mdz",
+  "description": "My Dev Zone",
+  "version": "0.0.1",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mdz-sidebar",
+          "title": "mDZ",
+          "icon": "resources/icons/icon-dark.svg"
+        }
+      ]
+    },
+    "views": {
+      "mdz-sidebar": [
+        {
+          "type": "webview",
+          "id": "mdz.mainView",
+          "name": "Main Panel",
+          "icon": "resources/icons/icon-dark.svg"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "mdz.openPanel",
+        "title": "Open MDZ"
+      },
+      {
+        "command": "mdz.login",
+        "title": "Login MDZ"
+      },
+      {
+        "command": "mdz.refresh",
+        "title": "Refresh mdz",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "mdz.clear",
+        "title": "Clear mdz Data",
+        "icon": "$(clear-all)"
+      }
+    ],
+    "configuration": {
+      "title": "mdz",
+      "properties": {
+        "mdz.autoRefresh": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto refresh panel content"
+        },
+        "mdz.theme": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "light",
+            "dark"
+          ],
+          "default": "auto",
+          "description": "Theme preference"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run clean && npm run compile:extension && npm run compile:webview",
+    "compile:extension": "npm run check-types && node esbuild.js",
+    "compile:webview": "cd webview-ui && npm run build",
+    "watch": "concurrently \"npm run watch:extension\" \"npm run watch:webview\"",
+    "watch:extension": "node esbuild.js --watch",
+    "watch:webview": "cd webview-ui && npm run dev",
+    "package": "npm run check-types && node esbuild.js --production && cd webview-ui && npm run build",
+    "pretest": "npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test",
+    "dev": "cd webview-ui && npm run dev",
+    "clean": "rimraf dist/",
+    "format:fix": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.85.0",
+    "@types/ws": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.8",
+    "axios": "^1.13.5",
+    "concurrently": "^8.2.2",
+    "esbuild": "^0.19.11",
+    "eslint": "^8.56.0",
+    "prettier": "3.8.1",
+    "rimraf": "^6.1.2",
+    "typescript": "^5.3.3",
+    "ws": "^8.19.0"
+  }
+}

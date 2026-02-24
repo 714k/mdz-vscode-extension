@@ -1,0 +1,55 @@
+:root {
+  --min-height-row: 100px;
+  --title-prompt-height: 30px;
+  --panel-height-offset: calc(var(--space-sm) * 2);
+}
+
+/* MAIN LAYOUT */
+
+.container {
+  display: grid;
+  padding: var(--space-sm);
+  grid-template-rows:
+    var(--title-prompt-height) /* Row 1: Fixed 30px */
+    minmax(var(--min-height-row), auto) /* Row 2: Min 100px, grows if needed */
+    1fr /* Row 3: Takes remaining space */
+    minmax(var(--min-height-row), auto);
+  grid-template-columns: 1fr;
+  gap: 10px;
+  height: calc(100vh - var(--panel-height-offset));
+}
+
+.grid-item {
+  border: solid 1px var(--color-border);
+}
+
+.prompt-title {
+  display: block;
+  line-height: var(--title-prompt-height);
+  margin: var(--space-sm) 0;
+}
+
+/* Important for chat UIs and diff views. */
+.scroll-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.app-header {
+  flex: 0 0 auto;
+  border-bottom: 1px solid var(--border-default);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.app-footer {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--border-default);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.app-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-default);
+  overflow-y: auto;
+}
