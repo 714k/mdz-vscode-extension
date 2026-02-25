@@ -19,7 +19,7 @@
       "activitybar": [
         {
           "id": "mdz-sidebar",
-          "title": "mDZ",
+          "title": "mdz",
           "icon": "resources/icons/icon-dark.svg"
         }
       ]
@@ -28,52 +28,45 @@
       "mdz-sidebar": [
         {
           "type": "webview",
-          "id": "mdz.mainView",
-          "name": "Main Panel",
-          "icon": "resources/icons/icon-dark.svg"
+          "id": "mdz.chatView",
+          "name": "Chat"
         }
       ]
     },
     "commands": [
       {
         "command": "mdz.openPanel",
-        "title": "Open MDZ"
+        "title": "Open mdz Panel",
+        "category": "mdz"
       },
       {
         "command": "mdz.login",
-        "title": "Login MDZ"
+        "title": "Login",
+        "category": "mdz"
       },
       {
-        "command": "mdz.refresh",
-        "title": "Refresh mdz",
-        "icon": "$(refresh)"
+        "command": "mdz.addFileContext",
+        "title": "Add Current File to Context",
+        "category": "mdz"
       },
       {
-        "command": "mdz.clear",
-        "title": "Clear mdz Data",
-        "icon": "$(clear-all)"
+        "command": "mdz.addSelectionContext",
+        "title": "Add Selection to Context",
+        "category": "mdz"
       }
     ],
-    "configuration": {
-      "title": "mdz",
-      "properties": {
-        "mdz.autoRefresh": {
-          "type": "boolean",
-          "default": true,
-          "description": "Auto refresh panel content"
-        },
-        "mdz.theme": {
-          "type": "string",
-          "enum": [
-            "auto",
-            "light",
-            "dark"
-          ],
-          "default": "auto",
-          "description": "Theme preference"
-        }
+    "keybindings": [
+      {
+        "command": "mdz.openPanel",
+        "key": "ctrl+shift+m+l",
+        "mac": "cmd+shift+m"
+      },
+      {
+        "command": "mdz.addFileContext",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f"
       }
-    }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
