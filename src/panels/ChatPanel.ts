@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { WebSocketService } from '../services/WebSocketService';
 import { getNonce } from '../utils/getNonce';
+import { ContextService } from '../services/context/AgregatorContextService';
 
 export class ChatPanel {
   public static currentPanel: ChatPanel | undefined;
@@ -11,6 +12,7 @@ export class ChatPanel {
     panel: vscode.WebviewPanel,
     extensionUri: vscode.Uri,
     private wsService: WebSocketService,
+    private contextService: ContextService,
   ) {
     this._panel = panel;
 
@@ -26,7 +28,11 @@ export class ChatPanel {
     this.setupWebSocketListeners();
   }
 
-  public static render(extensionUri: vscode.Uri, wsService: WebSocketService) {
+  public static render(
+    extensionUri: vscode.Uri,
+    wsService: WebSocketService,
+    contextService: ContextService,
+  ) {
     console.log('extensionUri', extensionUri);
     if (ChatPanel.currentPanel) {
       ChatPanel.currentPanel._panel.reveal(vscode.ViewColumn.Two);
@@ -44,7 +50,12 @@ export class ChatPanel {
         },
       );
 
-      ChatPanel.currentPanel = new ChatPanel(panel, extensionUri, wsService);
+      ChatPanel.currentPanel = new ChatPanel(
+        panel,
+        extensionUri,
+        wsService,
+        contextService,
+      );
     }
   }
 
@@ -113,13 +124,52 @@ export class ChatPanel {
           case 'sendMessage':
             this.wsService.sendChatMessage(
               message.content,
-              message.context,
+              message.model,
+              { ...message.context, ...this.contextService.serializeContext() },
               message.requestId,
             );
             break;
 
           case 'disconnect':
             this.wsService.disconnect();
+            break;
+
+          case 'addContext':
+            try {
+              switch (message.type) {
+                case 'file':
+                  await this.contextService.addFileContext();
+                  break;
+                case 'selection':
+                  await this.contextService.addSelectionContext();
+                  break;
+                case 'folder':
+                  await this.contextService.addFolderContext();
+                  break;
+                case 'symbol':
+                  await this.contextService.addSymbolContext();
+                  break;
+                default:
+                  throw new Error('Unknown context type');
+              }
+
+              webview.postMessage({
+                type: 'context.updated',
+                data: this.contextService.serializeContext(),
+              });
+            } catch (error: any) {
+              vscode.window.showErrorMessage(
+                `Failed to add context: ${error.message}`,
+              );
+            }
+            break;
+
+          case 'removeContext':
+            this.contextService.removeContext(message.id);
+            webview.postMessage({
+              type: 'context.updated',
+              data: this.contextService.serializeContext(),
+            });
             break;
         }
       },
@@ -186,6 +236,7 @@ export class ChatPanel {
     ChatPanel.currentPanel = undefined;
 
     this._panel.dispose();
+    this.contextService.dispose();
 
     while (this._disposables.length) {
       const disposable = this._disposables.pop();

@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { WebSocketService } from '../services/WebSocketService';
+import { ContextService } from '../services/context/AgregatorContextService';
 import { getNonce } from '../utils/getNonce';
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
@@ -10,6 +11,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
   constructor(
     private readonly _extensionUri: vscode.Uri,
     private readonly wsService: WebSocketService,
+    private readonly contextService: ContextService,
   ) {}
 
   public resolveWebviewView(webviewView: vscode.WebviewView) {
@@ -55,12 +57,47 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           break;
 
         case 'sendMessage':
-          console.log('wtf');
           this.wsService.sendChatMessage(
             message.content,
-            message.context,
+            message.model,
+            { ...message.context, ...this.contextService.serializeContext() },
             message.requestId,
           );
+          break;
+
+        case 'addContext':
+          try {
+            switch (message.type) {
+              case 'file':
+                await this.contextService.addFileContext();
+                break;
+              case 'selection':
+                await this.contextService.addSelectionContext();
+                break;
+              case 'folder':
+                await this.contextService.addFolderContext();
+                break;
+              case 'symbol':
+                await this.contextService.addSymbolContext();
+                break;
+              default:
+                throw new Error('Unknown context type');
+            }
+            webviewView.webview.postMessage({
+              type: 'context.updated',
+              data: this.contextService.serializeContext(),
+            });
+          } catch (error: any) {
+            vscode.window.showErrorMessage(`Failed to add context: ${error.message}`);
+          }
+          break;
+
+        case 'removeContext':
+          this.contextService.removeContext(message.id);
+          webviewView.webview.postMessage({
+            type: 'context.updated',
+            data: this.contextService.serializeContext(),
+          });
           break;
 
         case 'disconnect':

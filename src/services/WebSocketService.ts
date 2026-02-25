@@ -88,12 +88,10 @@ export class WebSocketService extends EventEmitter {
     }
   }
 
-  sendChatMessage(content: string, context: any = {}, requestId: string): void {
-    console.log('WTF????', content);
-    console.log('WTF????', requestId);
+  sendChatMessage(content: string, model: string, context: any = {}, requestId: string): void {
     this.send({
       type: 'chat.message',
-      payload: { content, context },
+      payload: { content, model, context },
       request_id: requestId,
     });
   }
